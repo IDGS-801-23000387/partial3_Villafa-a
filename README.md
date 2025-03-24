@@ -47,7 +47,7 @@ Abre tu navegador y visita:🔗 http://localhost:5000
 3️⃣ Introduce un nombre de usuario y contraseña válidos
 4️⃣Haz clic en "Iniciar sesión"
 
-📊 Acceder al Dashboard
+📊 Acceder al Sistema 
 
 Tras iniciar sesión, serás redirigido al Sistema de Ventas
 
