@@ -1,0 +1,180 @@
+{% extends "layout.html" %}
+{% import "_macros.html" as macro %}
+{% block container %}
+<div class="min-h-screen w-screen px-4 py-2">
+  <a href="{{ url_for('logout') }}"
+                            class="block py-2 pl-3 pr-4 text-gray-700 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Cerrar Sesión</a>
+  <div class="grid grid-row-3 gap-5">
+    <!-- Formulario de Pedido -->
+    <form method="POST" action="{{ url_for('sistema') }}" novalidate>
+
+      {{ pedido_form.csrf_token }}
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="flex flex-col items-center justify-center py-10 gap-10 bg-[#99B4D1] border border-dashed">
+        <div class="flex justify-around w-full">
+          <div>{{ macro.camposNuevos(pedido_form.nombre, class="bg-white custom-class") }}</div>
+          <div> {{ macro.camposNuevos(pedido_form.direccion, class="bg-white custom-class") }} </div>
+          <div>  {{ macro.camposNuevos(pedido_form.telefono, class="bg-white custom-class", style="width: 180px;") }} </div>
+        </div>
+        <div class="flex justify-around w-full">
+          <div class="grid grid-rows-3 border-1 border-white py-6 pr-16 pl-4 relative">
+            <span class="absolute -top-4 left-3 bg-[#99B4D1]">Tamaño pizza</span>
+            {% for subfield in pedido_form.tamanioPizza %}
+              <div style="width: 180px;">
+                {{ subfield }} {{ subfield.label.text }}
+              </div>
+            {% endfor %}
+            <!-- Mostrar errores para tamaño de pizza -->
+            {% if pedido_form.tamanioPizza.errors %}
+              <div class="text-red-600 text-xs mt-1">
+                {% for error in pedido_form.tamanioPizza.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>         
+          <div class="grid grid-rows-3 border-1 border-white py-6 pr-16 pl-4 relative">
+            <span class="absolute -top-4 left-3 bg-[#99B4D1]">Ingredientes</span>
+            {% for subfield in pedido_form.ingredientes %}
+              <div style="width: 180px;">
+                {{ subfield }} {{ subfield.label.text }}
+              </div>
+            {% endfor %}
+            <!-- Mostrar errores para ingredientes -->
+            {% if pedido_form.ingredientes.errors %}
+              <div class="text-red-600 text-xs mt-1">
+                {% for error in pedido_form.ingredientes.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>        
+          <div class="flex flex-col gap-10 items-center justify-center">
+            <div>
+              {{ macro.camposNuevos(pedido_form.numPizzas, class="bg-white custom-class", style="width: 180px;") }}
+            </div>
+            <input type="submit" name="Agregar" value="Agregar" class="bg-gray-100 w-24 cursor-pointer hover:bg-gray-200" />
+          </div>
+        </div>
+      </div>     
+    </form>
+    <div class="grid grid-cols-2 bg-[#99B4D1] p-10 border border-dashed">
+        <div class="flex flex-col gap-10">
+          <table
+            class="py-2 w-[90%] text-sm text-left rtl:text-right bg-[#ABABAB]"
+          >
+            <thead class="text-xs bg-[#ABABAB]">
+              <tr class="bg-white">
+              <th scope="col" class="px-6 py-3">ID</th>
+              <th scope="col" class="px-6 py-3">Tamaño</th>
+              <th scope="col" class="px-6 py-3">Ingredientes</th>
+              <th scope="col" class="px-6 py-3">Num. Pizzas</th>
+              <th scope="col" class="px-6 py-3">SubTotal</th>
+              <th scope="col" class="px-6 py-3">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for pedido in pedidos %}
+                <tr>
+                  <td class="px-6 py-3 font-medium bg-white">{{ pedido.id }}</td>
+                  <td class="px-6 py-3 font-medium bg-white">{{ pedido.tamanio }}</td>
+                  <td class="px-6 py-3 font-medium bg-white">{{ pedido.ingredientes }}</td>
+                  <td class="px-6 py-3 font-medium bg-white">{{ pedido.num_pizzas }}</td>
+                  <td class="px-6 py-3 font-medium bg-white">${{ pedido.subtotal }}</td>
+                  <td class="px-6 py-3 font-medium bg-white">
+                    <!-- Botón de Quitar -->
+                    <form method="POST" action="{{ url_for('sistema') }}">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      <input type="hidden" name="id_quitar" value="{{ pedido.id }}">
+                      <input type="submit" name="Quitar" value="Quitar" class="bg-red-100 px-2 cursor-pointer hover:bg-red-200">
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+              <tr>
+                <td class="px-6 py-3 font-medium bg-[#ABABAB]"></td>
+                <td class="px-6 py-3 font-medium bg-[#ABABAB]"></td>
+                <td class="px-6 py-3 font-medium bg-[#ABABAB]"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-around">
+            {% if pedidos %}
+            <div class="flex justify-end mt-4">
+              <form method="POST" action="{{ url_for('sistema') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="submit" name="Terminar" value="Terminar Pedido" class=" bg-gray-100 px-2" />
+              </form>
+            </div>
+          {% endif %}    
+          </div>
+        </div>
+      <div class="flex flex-col h-auto w-auto bg-[#ABABAB] p-6 items-center gap-5 border border-dashed">
+        <div class="flex flex-col border border-white w-full items-center justify-center h-[200px] overflow-y-auto">
+          <span class="font-bold text-lg mb-4">Resultados de Búsqueda</span>
+          {% if resultados_busqueda %}
+            <table class="w-full text-sm bg-white">
+              <thead>
+                <tr>
+                  <th class="px-4 py-2">Cliente</th>
+                  <th class="px-4 py-2">Fecha</th>
+                  <th class="px-4 py-2">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for venta in resultados_busqueda %}
+                  <tr>
+                    <td class="border px-4 py-2">{{ venta.nombre }}</td>
+                    <td class="border px-4 py-2">{{ venta.fecha_compra.strftime('%Y-%m-%d') }}</td>
+                    <td class="border px-4 py-2">${{ venta.total }}</td>
+                  </tr>
+                {% endfor %}
+                <tr>
+                  <td colspan="2" class="border px-4 py-2 font-bold text-right">Total:</td>
+                  <td class="border px-4 py-2 font-bold">${{ total_busqueda }}</td>
+                </tr>
+              </tbody>
+            </table>
+          {% else %}
+            <span>No hay resultados para la búsqueda</span>
+          {% endif %}
+        </div>
+        <div class="flex flex-col gap-6">
+          <h2 class="text-lg font-bold">Buscar Ventas</h2>
+          <form method="POST" action="{{ url_for('sistema') }}" class="flex flex-col gap-4">
+            {{ busqueda_form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="border-1 border-white py-6 px-4 relative">
+                <span class="absolute -top-4 left-3 bg-[#99B4D1]">Tipo de Búsqueda</span>
+                {% for subfield in busqueda_form.tipo_busqueda %}
+                  <div class="my-2">
+                    {{ subfield }} {{ subfield.label.text }}
+                  </div>
+                {% endfor %}
+                <!-- Mostrar errores para tipo de búsqueda -->
+                {% if busqueda_form.tipo_busqueda.errors %}
+                  <div class="text-red-600 text-xs mt-1">
+                    {% for error in busqueda_form.tipo_busqueda.errors %}
+                      {{ error }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+              
+              <div class="flex flex-col gap-4">
+                <div>
+                  {{ macro.camposNuevos(busqueda_form.fecha, class="bg-white custom-class", placeholder="YYYY-MM-DD o YYYY-MM") }}
+                </div>
+                <div>
+                  {{ busqueda_form.buscar(class="bg-gray-100 w-full cursor-pointer hover:bg-gray-200") }}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

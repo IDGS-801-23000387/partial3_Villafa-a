@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% import "_macros.html" as macro %}
+{% block container %}
+<div class="flex h-screen bg-white">
+    <div class="w-full max-w-xs m-auto   rounded p-5" style="  border-radius: 10px; border: 2px solid rgba(105, 105, 110, 0.571);">   
+          <header>
+
+            <img class="w-20 mx-auto mb-5" src="{{ url_for('static', filename='img/logo.png') }}" />
+
+          </header>   
+          <form  method="POST" action="{{ url_for('login') }}">
+            {{ form.hidden_tag() }}
+            <div>
+              <label class="block mb-2 text-indigo-500" for="username">Usuario</label>
+              {{ form.username(class="w-full p-2 mb-6 text-indigo-900 border-b-2 border-indigo-500 outline-none") }}
+            </div>
+            <div>
+              <label class="block mb-2 text-indigo-500" for="password">Contraseña</label>
+              {{ form.password(class="w-full p-2 mb-6 text-indigo-900 border-b-2 border-indigo-500 outline-none") }}
+            </div>
+            <div>    
+                {{ form.submit(class="w-full bg-indigo-700 hover:bg-red-700 text-white font-bold py-2 px-4 mb-6 rounded") }}      
+                   
+            </div>       
+          </form>  
+          <footer>
+            
+            <a class="text-indigo-700 hover:text-red-700 text-sm float-right" href="{{ url_for('register') }}"  >Registrarse</a>
+          </footer>   
+        </div>
+    </div>
+{% endblock %}
