@@ -1,6 +1,6 @@
 🎯 Proyecto Flask -Login  Autenticación de Usuarios
 
-Bienvenido a este proyecto basado en Flask, donde implementamos autenticación de usuarios con manejo de sesiones y una interfaz atractiva gracias a Tailwind CSS. 
+Bienvenido a este proyecto basado en Flask, donde implementamos autenticación de usuarios con manejo de sesiones  
 
 Sigue las instrucciones para configurarlo y ejecutarlo correctamente.
 
@@ -9,6 +9,7 @@ Sigue las instrucciones para configurarlo y ejecutarlo correctamente.
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
 ✅ Python 
+
 ✅ Pip (gestor de paquetes de Python)
 
 🚀 Instalación
